@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5 PERGUNTAS: AMOR DA MINHA VIDA?</title>
+    <style>
+        * {
+            border: 0;
+            padding: 0;
+            margin: 0;
+        }
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #d3faae;
+            font-family: Arial, sans-serif;
+        }
+        main {
+            padding: 15px;
+            text-align: center;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .pergunta {
+            background-color: #60b210;
+            color: white;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 4px;
+        }
+        .resposta {
+            margin-bottom: 10px;
+            position: relative;
+            height: 100px; 
+        }
+        input[type="text"] {
+            padding: 5px;
+            width: calc(100% - 12px);
+            margin-bottom: 10px;
+        }
+        .center {
+            display: flex;
+            justify-content: center;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #60b210;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            position: relative; 
+        }
+       
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Responda corretamente as 5 perguntas para saber se você é o amor da minha vida</h1>
+        <div class="pergunta">
+            <label id="pergunta">Amor</label>
+        </div>
+        <div class="resposta">
+            <input type="text" id="resposta" placeholder="Digite sua resposta aqui">
+        </div>
+        <div class="center">
+            <button id="enviar" onclick="validarResposta()">Enviar</button>
+        </div>
+    </main>
+    <script>
+        let atual = 0;
+        const perguntas = [
+            {
+                pergunta: 'Qual seu nome?',
+                resposta: 'Marcelo'
+            },
+            {
+                pergunta: 'Para qual time você torce?',
+                resposta: 'Palmeiras'
+            },
+            {
+                pergunta: 'Você é o namorado mais lindo do mundo?',
+                resposta: 'Sim'
+            },
+            {
+                pergunta: 'Sua namorada é bonita?',
+                resposta: 'Não'
+            },
+            {
+                pergunta: 'Você quer namorar comigo mesmo?',
+                resposta: 'SIM'
+            }
+        ];
+
+        document.getElementById('pergunta').innerText = perguntas[atual].pergunta;
+
+        function validarResposta() {
+            let resposta;
+            if (atual < 2) {
+                resposta = document.getElementById('resposta').value;
+            } else {
+                resposta = this.value;
+            }
+
+            if (resposta.trim().toLowerCase() === perguntas[atual].resposta.toLowerCase()) {
+                atual++;
+                if (atual < perguntas.length) {
+                    mostrarPergunta();
+                } else {
+                    
+                    document.querySelector('main').innerHTML = '<h1>Você é o amor da minha vida! <br> Eu amo você.</h1>';
+                }
+            } else {
+                alert('Resposta incorreta.');
+            }
+        }
+
+        let lastX = 0;
+        let lastY = 0;
+
+        function moverBotao() {
+            const botao = this;
+            const container = botao.parentElement;
+            const containerRect = container.getBoundingClientRect();
+            const botaoRect = botao.getBoundingClientRect();
+            
+            const maxX = containerRect.width - botaoRect.width;
+            const maxY = containerRect.height - botaoRect.height;
+            
+            let newX, newY;
+            do {
+                newX = Math.floor(Math.random() * maxX);
+                newY = Math.floor(Math.random() * maxY);
+            } while (Math.abs(newX - lastX) < 50 && Math.abs(newY - lastY) < 50); 
+            
+            botao.style.position = 'absolute';
+            botao.style.left = `${newX}px`;
+            botao.style.top = `${newY}px`;
+
+            lastX = newX;
+            lastY = newY;
+        }
+
+        function mostrarPergunta() {
+            const pergunta = perguntas[atual];
+            document.getElementById('pergunta').innerText = pergunta.pergunta;
+            const respostaDiv = document.querySelector('.resposta');
+            respostaDiv.innerHTML = '';
+            const botaoEnviar = document.getElementById('enviar');
+            
+            if (atual < 2) {
+                respostaDiv.innerHTML = '<input type="text" id="resposta" placeholder="Digite sua resposta aqui">';
+                botaoEnviar.style.display = 'block';
+            } else {
+                botaoEnviar.style.display = 'none';
+                respostaDiv.style.position = 'relative';
+                
+                const botaoSim = document.createElement('button');
+                botaoSim.innerText = 'Sim';
+                botaoSim.value = 'Sim';
+                botaoSim.onclick = validarResposta;
+                if (atual === 3) {
+                    botaoSim.onmouseover = moverBotao;
+                }
+                respostaDiv.appendChild(botaoSim);
+
+                const botaoNao = document.createElement('button');
+                botaoNao.innerText = 'Não';
+                botaoNao.value = 'Não';
+                botaoNao.onclick = validarResposta;
+                if (atual === 2) {
+                    botaoNao.onmouseover = moverBotao;
+                }
+                respostaDiv.appendChild(botaoNao);
+            }
+        }
+
+        mostrarPergunta();
+    </script>
+</body>
+</html>
+
+
